@@ -1,0 +1,55 @@
+#terminal {
+  overflow: auto;
+  width: 90%;
+  height: 36em;
+  resize: both;
+  background-color: black;
+  color: white;
+  padding: 2%;
+  border: 1px dashed grey;
+}
+
+.terminals {
+  color: snow;
+  margin-bottom: 0;
+  height: 100%;
+}
+
+pre#info {
+  margin-bottom: 0;
+  float: left;
+  font-size: 0.9em;
+  padding: 0.3em;
+  transition: 400ms;
+  color: black;
+  width: 40%;
+}
+
+div.demo-examples-container {
+  line-height: 1.7;
+  padding-bottom: 1.5%;
+  transition: 800ms;
+}
+
+.demo-examples {
+  color: snow;
+  background-color: #4635f7;
+  border-radius: 0;
+  font-size: 0.9em;
+  margin-right: 0.5em;
+  margin-top: 0.5em;
+  cursor: pointer;
+  transition: 800ms;
+  display: inline-block;
+  padding: 0.5%;
+}
+
+.demo-examples:hover {
+  background-color: #ff357a;
+  transition: 800ms;
+}
+
+.what-is-this {
+  margin-bottom: 15%;
+  float: right;
+}

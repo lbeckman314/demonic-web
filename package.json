@@ -1,0 +1,20 @@
+{
+  "name": "demo-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ansi_up": "^4.0.3",
+    "autolinker": "^3.1.0",
+    "bson": "^4.0.2",
+    "jquery": "^3.4.1"
+  }
+}
