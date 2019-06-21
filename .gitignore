@@ -1,0 +1,8 @@
+*.pem
+node_modules/
+config.js
+*.sw*
+programs/
+files/
+virtual/
+tags
