@@ -13,8 +13,8 @@ import {bootup} from './demo.js';
 
 export {termInit};
 
-
 $(document).ready(() => {
+    console.log('Converting to codemirror.');
     pandoc_to_codemirror();
     let sourced = false;
     $('#edit-source').click(() => {
@@ -24,7 +24,6 @@ $(document).ready(() => {
         }
     });
 });
-
 
 function source() {
     let source = new Request('doc-demonstration.md');

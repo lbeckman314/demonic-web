@@ -1,7 +1,13 @@
 html {
-    background-color: black;
-    color: snow;
+    background-color: #131516;
+    color: #c5c5c5;
 }
+
+body {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
 
 #terminal {
   overflow: auto;
@@ -66,4 +72,11 @@ div.demo-examples-container {
 
 a {
     color: #678cfa;
+}
+
+p, li {
+    font-size: 1em;
+    line-height: 2;
+    font-family: DejaVu Serif;
+    color: snow;
 }

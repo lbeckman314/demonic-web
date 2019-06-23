@@ -113,7 +113,7 @@ Edit Source
 <a class="sourceLine" id="cb2-10" title="10">}</a></code></pre></div>
 <h2 id="support-and-roadmap">Support and Roadmap</h2>
 <p>This project aims to allow unmodified markdown files to have editable and runnable code blocks. But there needs to be a way for users to tell which program blocks they want to run and which they don’t. Unfortunately, this requires a modification to the markdown files! In this instance, the following markdown code had a “.norun” class addition, which tells demo not to add a “▶” button to the code block.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><a class="sourceLine" id="cb3-1" title="1"><span class="bn">    ```{.python .norun}</span></a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown norun"><code class="sourceCode markdown"><a class="sourceLine" id="cb3-1" title="1"><span class="bn">    ```{.python .norun}</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="bn">    print(&quot;Don&#39;t run me!&quot;)</span></a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="bn">    ```</span></a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python norun"><code class="sourceCode python"><a class="sourceLine" id="cb4-1" title="1"><span class="bu">print</span>(<span class="st">&quot;Don&#39;t run me!&quot;</span>)</a></code></pre></div>
@@ -129,7 +129,7 @@ Edit Source
 <li>Being able to switch modes for each buffer. This should be made a little easier by CodeMirror’s <a href="https://codemirror.net/demo/changemode.html">ability</a> to do just that.</li>
 <li>Having the option to run the code block converter from the command line i.e. not only at “runtime” as it currently does).</li>
 <li>Having the option to choose between <a href="https://codemirror.net/">CodeMirror</a> and <a href="https://ace.c9.io/">Ace</a> for the online editors.</li>
-<li>If you have any other suggestions, let me know at <a href="https://github.com/lbeckman314/demo/issues">this</a> issue reporter or by e-mail. I’m available at <a href="mailto:liam@liambeckman.com">liam@liambeckman.com</a>. : )</li>
+<li>If you have any other suggestions, let me know at <a href="https://github.com/lbeckman314/demo/issues">this</a> issue reporter or by e-mail. I’m available at <a href="mailto:liam@liambeckman.com">liam@liambeckman.com</a> : )</li>
 </ul>
 <p>Adding support requires playing around with the resulting DOM structure of each converter and file type, and being able to extract the <code>language</code> and <code>code</code> of each code block.</p>
 </body>
