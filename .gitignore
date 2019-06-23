@@ -6,3 +6,4 @@ programs/
 files/
 virtual/
 tags
+tmp/demo.*
