@@ -14,7 +14,7 @@ const development_url = 'ws://localhost:8181';
 const options = {
     'force new connection':true,
 }
-const DEV = true;
+const DEV = false;
 
 // namespace
 var lib = lib || (function() {
