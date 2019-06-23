@@ -8,8 +8,12 @@ const AU = require('ansi_up');
 const ansi_up = new AU.default;
 const BSON = require('bson');
 
+
 const production_url = 'wss://liambeckman.com:8181';
 const development_url = 'ws://localhost:8181';
+const options = {
+    'force new connection':true,
+}
 const DEV = true;
 
 // namespace
@@ -40,7 +44,9 @@ $(document).ready(() => {
 function bootup(args) {
     console.log('booting up');
     console.log('args:', args);
-    let terminals = $(".terminals");
+    //let terminals = $(".terminals");
+    let terminals = args.terminal[0].childNodes;
+    console.log('terminals:', terminals);
 
     let duplicateTerminal = $("#duplicate-terminal");
     if (duplicateTerminal) {
@@ -104,8 +110,8 @@ function dup() {
     terminalContainer.appendChild(clone);
 
     // Create WebSocket connection.
-    let socket = new WebSocket('wss://liambeckman.com:8181');
-    //let socket = new WebSocket('wss://localhost:8181');
+    let socket = new WebSocket('wss://liambeckman.com:8181', options);
+    //let socket = new WebSocket('wss://localhost:8181', options);
 
     doTerminal(clone, socket, {mode: 'command'});
 
@@ -226,10 +232,16 @@ function doTerminal(terminal, socket, args) {
                 }
 
                 else {
+                    // ansi_up (converts ansi colors to html colors).
                     message = ansi_up.ansi_to_html(message);
-                    console.log('message:', message);
-                    console.log('typeof message:', typeof message);
-                    message = Autolinker.link(message);
+
+                    // Autolinker (makes clickable url's).
+                    const matches = Autolinker.parse(message);
+                    if (matches.length > 0) {
+                        message = Autolinker.link(message);
+                        //window.open(matches[0].getUrl());
+                    }
+
                     let from_server = document.createElement("span");
                     from_server.className = "from_server";
                     from_server.innerHTML = message;
@@ -239,8 +251,7 @@ function doTerminal(terminal, socket, args) {
                     user_input.className = "user_input";
                     user_input.innerHTML = "";
                     terminal.appendChild(user_input);
-                    //terminal.innerHTML += message;
-                    //pasteHtmlAtCaret('<b>INSERTED</b>')
+
                     setCaret(terminal);
                 }
             });

@@ -1,84 +1,141 @@
-var sel_top = document.getElementById("buffers_top");
-CodeMirror.on(sel_top, "change", function() {
-    selectBuffer(ed, sel_top.options[sel_top.selectedIndex].value);
+import $ from 'jquery';
+
+import CodeMirror from 'codemirror';
+import 'codemirror/mode/python/python.js';
+import 'codemirror/mode/clike/clike.js';
+import 'codemirror/mode/markdown/markdown.js';
+import 'codemirror/mode/javascript/javascript.js';
+import 'codemirror/theme/dracula.css';
+import 'codemirror/lib/codemirror.css';
+import './demo.css';
+
+import {bootup} from './demo.js';
+
+export {termInit};
+
+
+$(document).ready(() => {
+    pandoc_to_codemirror();
+    let sourced = false;
+    $('#edit-source').click(() => {
+        if (! sourced) {
+            source();
+            sourced = true;
+        }
+    });
 });
 
 
-var buffers = {};
+function source() {
+    let source = new Request('client-example.md');
 
-function openBuffer(name, text, mode) {
-    buffers[name] = CodeMirror.Doc(text, mode);
-    var opt = document.createElement("option");
-    opt.appendChild(document.createTextNode(name));
-    sel_top.appendChild(opt);
+    const source_container = document.createElement('div');
+    const source_header = document.createElement('h2');
+    source_header.innerText = 'Source';
+    source_header.id = source_header.innerText.toLowerCase();
+    source_container.id = 'source_container';
+    document.getElementsByTagName('body')[0].appendChild(source_container);
+    source_container.before(source_header);
+
+    fetch(source)
+        .then(response => response.text())
+        .then(data => {
+            let editor = CodeMirror(source_container, {
+                value: data,
+                mode:  "markdown",
+                theme: "dracula",
+                lineNumbers: true,
+                viewportMargin: Infinity,
+                lineWrapping: true,
+            });
+
+            // compile/run button
+            let buttons = $('<div></div>');
+            buttons.attr('class', 'buttons');
+
+            let run = $('<button></button>');
+            run.text('▶');
+            run.attr('onclick', 'Demo.termInit(this)');
+            buttons.append(run);
+
+            let child = source_container.childNodes[0];
+            source_container.insertBefore(buttons[0], child);
+        });
 }
 
-function newBuf(where) {
-    var name = prompt("Name for the buffer", "*scratch*");
-    if (name == null) return;
-    if (buffers.hasOwnProperty(name)) {
-        alert("There's already a buffer by that name.");
-        return;
+// markdown -> html -> codemirror converters
+function pandoc_to_codemirror() {
+    let i = 1;
+
+    // cb = "codeblock"
+    let identifier = `#cb${i}`;
+    while ($(identifier).length > 0) {
+        let myTextArea = $(identifier)[0].childNodes[0];
+
+        // mode
+        let mode = myTextArea.classList[1];
+        if (mode == 'c') {
+            mode = 'text/x-csrc';
+        }
+
+        // codemirror
+        let editor = CodeMirror(function(elt) {
+            myTextArea.parentNode.replaceChild(elt, myTextArea);
+        }, {
+            value: myTextArea.innerText,
+            mode: mode,
+            theme: "dracula",
+            lineNumbers: true,
+            viewportMargin: Infinity,
+            lineWrapping: true,
+        });
+
+        console.log('identifier:', identifier);
+        console.log('mode:', mode);
+        console.log('editor:', editor);
+
+        // compile/run button
+        if (myTextArea.classList.contains('norun')) {
+            i += 1;
+            identifier = `#cb${i}`;
+            continue;
+        }
+
+        let buttons = $('<div></div>');
+        buttons.attr('class', 'buttons');
+
+        let run = $('<button></button>');
+        run.text('▶');
+        run.attr('onclick', 'Demo.termInit(this)');
+        buttons.append(run);
+
+        let child = $(identifier)[0].childNodes[0];
+        $(identifier)[0].insertBefore(buttons[0], child);
+
+        i += 1;
+        identifier = `#cb${i}`;
     }
-    openBuffer(name, "", "javascript");
 }
 
-function selectBuffer(editor, name) {
-    var buf = buffers[name];
-    if (buf.getEditor()) buf = buf.linkedDoc({sharedHist: true});
-    var old = editor.swapDoc(buf);
-    var linked = old.iterLinkedDocs(function(doc) {linked = doc;});
-    if (linked) {
-        // Make sure the document in buffers is the one the other view is looking at
-        for (var name in buffers) if (buffers[name] == old) buffers[name] = linked;
-        old.unlinkDoc(linked);
-    }
-    editor.focus();
+function jekyll_to_codemirror() {
+
 }
 
-function nodeContent(id) {
-    console.log(id);
-    var node = document.getElementById(id), val = node.textContent || node.innerText;
-    val = val.slice(val.match(/^\s*/)[0].length, val.length - val.match(/\s*$/)[0].length) + "\n";
-    return val;
+function org_to_codemirror() {
+
 }
 
-openBuffer("c",
-`#include <stdio.h>
-
-int main() {
-    printf("%s\\n", "hello!");
-    return 0;
-}
-
-`, "text/x-csrc");
-
-openBuffer("js", "console.log('hello!');", "javascript");
-openBuffer("py", `print('hello!')
-val = input("Enter your value: ")
-print(val)`, "python");
-openBuffer("css", nodeContent("style"), "css");
-var ed = CodeMirror(document.getElementById("code_top"), {
-    lineNumbers: true,
-    mode: "text/x-csrc",
-    theme: "dracula",
-});
-selectBuffer(ed, "c");
-
-
-function termInit() {
-    let ed = document.querySelector('.CodeMirror').CodeMirror;
-    console.log('ed:', ed);
-
+// starts up the websocket
+function termInit(element) {
+    let ed_parent = element.parentNode.parentNode;
+    let ed = element.parentNode.parentNode.childNodes[1].CodeMirror;
     let code = ed.getValue();
-    console.log('code:', code);
 
     let language = ed.getMode().name;
-    console.log('language:', language);
-    console.log('SHOW:', $('#terminal').show().length);
+    let terminal;
 
-    if ($('#terminal').show().length == 0) {
-        let terminal = $('<div></div>');
+    if (! ed_parent.querySelector('#terminal')) {
+        terminal = $('<div></div>');
         terminal.attr('id', 'terminal');
 
         let terminals = $('<pre></pre>')
@@ -87,16 +144,21 @@ function termInit() {
         terminals.attr('contentEditable', 'true');
 
         terminal.append(terminals);
-        $('#buttons').append(terminal);
+        ed_parent.append(terminal[0]);
         console.log('terminal:', terminal);
+    }
+    else {
+        terminal = [
+            ed_parent.querySelector('#terminal')
+        ];
     }
 
     let args = {
         mode: 'code',
         code: code,
         language: language,
+        terminal: terminal,
     }
 
-    Demo.bootup(args);
+    bootup(args);
 }
-

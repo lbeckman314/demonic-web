@@ -1,7 +1,12 @@
+html {
+    background-color: black;
+    color: snow;
+}
+
 #terminal {
   overflow: auto;
-  width: 90%;
-  height: 36em;
+  //width: 90%;
+  //height: 36em;
   resize: both;
   background-color: black;
   color: white;
@@ -52,4 +57,13 @@ div.demo-examples-container {
 .what-is-this {
   margin-bottom: 15%;
   float: right;
+}
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+
+a {
+    color: #678cfa;
 }
