@@ -27,7 +27,7 @@ $(document).ready(() => {
 
 
 function source() {
-    let source = new Request('client-example.md');
+    let source = new Request('doc-demonstration.md');
 
     const source_container = document.createElement('div');
     const source_header = document.createElement('h2');
