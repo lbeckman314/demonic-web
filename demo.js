@@ -7,10 +7,7 @@ const ansi_up = new AU.default;
 
 const production_url = 'wss://liambeckman.com:8181';
 const development_url = 'ws://localhost:8181';
-const options = {
-    'force new connection':true,
-}
-const DEV = true;
+const DEV = false;
 
 // namespace
 var lib = lib || (function() {
@@ -106,8 +103,7 @@ function dup() {
     terminalContainer.appendChild(clone);
 
     // Create WebSocket connection.
-    let socket = new WebSocket('wss://liambeckman.com:8181', options);
-    //let socket = new WebSocket('wss://localhost:8181', options);
+    const socket = getSocket();
 
     doTerminal(clone, socket, {mode: 'command'});
 
