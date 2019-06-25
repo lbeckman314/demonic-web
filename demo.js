@@ -2,19 +2,15 @@
 // url linker
 import Autolinker from 'autolinker';
 // used mainly for the nice syntax
-import $ from 'jquery';
-import jQuery from 'jquery';
 const AU = require('ansi_up');
 const ansi_up = new AU.default;
-const BSON = require('bson');
-
 
 const production_url = 'wss://liambeckman.com:8181';
 const development_url = 'ws://localhost:8181';
 const options = {
     'force new connection':true,
 }
-const DEV = false;
+const DEV = true;
 
 // namespace
 var lib = lib || (function() {
@@ -34,7 +30,7 @@ var lib = lib || (function() {
 export {lib};
 export {bootup};
 
-$(document).ready(() => {
+document.addEventListener("DOMContentLoaded", () => {
     let boot = lib.args().boot;
     if (boot == true) {
         bootup(lib.args());
@@ -45,10 +41,10 @@ function bootup(args) {
     console.log('booting up');
     console.log('args:', args);
     //let terminals = $(".terminals");
-    let terminals = args.terminal[0].childNodes;
+    let terminals = args.terminal;
     console.log('terminals:', terminals);
 
-    let duplicateTerminal = $("#duplicate-terminal");
+    let duplicateTerminal = document.getElementById("duplicate-terminal");
     if (duplicateTerminal) {
         duplicateTerminal.onclick = () => {
             if (terminals.length < 2) {
@@ -57,17 +53,17 @@ function bootup(args) {
         }
     }
 
-    let examples = $(".demo-examples");
+    let examples = document.getElementsByClassName("demo-examples");
     for (let i = 0; i < examples.length; i++) {
         let example = examples[i].innerHTML;
         examples[i].onclick = () => {
-            terminals[0].innerHTML = terminals[0].innerHTML.replace(/.*$/ ,"> " + example);
-            terminals[0].focus();
+            terminals.innerHTML = terminals.innerHTML.replace(/.*$/ ,"> " + example);
+            terminals.focus();
         }
     }
 
     let socket = getSocket();
-    doTerminal(terminals[0], socket, args);
+    doTerminal(terminals, socket, args);
 
     const interval = setInterval(function ping() {
         if (socket.isAlive === false) {
@@ -77,7 +73,7 @@ function bootup(args) {
 
         else {
             socket.isAlive = false;
-            let ping = BSON.serialize({
+            let ping = JSON.stringify({
                 command: 'ping',
             });
             socket.send(ping);
@@ -101,11 +97,11 @@ function getSocket() {
 
 // adds an additional terminal below the first.
 function dup() {
-    let terminals = $(".terminals");
-    let terminalContainer = $(".terminal");
-    let buttonContainer = $("#button-container");
+    let terminals = document.getElementsByClassName("terminals");
+    let terminalContainer = document.getElementsByClassName("terminal");
+    let buttonContainer = document.getElementById("button-container");
 
-    let clone = $('<textarea>');
+    let clone = document.createElement('textarea');
     clone.className = "terminals";
     terminalContainer.appendChild(clone);
 
@@ -115,7 +111,7 @@ function dup() {
 
     doTerminal(clone, socket, {mode: 'command'});
 
-    let removeTerminal = $('span');
+    let removeTerminal = document.createElement('span');
     removeTerminal.id = "remove-terminal";
     removeTerminal.innerHTML = "-";
     buttonContainer.appendChild(removeTerminal);
@@ -129,7 +125,7 @@ function dup() {
 
 // used for the zigzag tcp chat program
 function zigzagPort(message) {
-    let terminals = $(".terminals");
+    let terminals = document.getElementsByClassName("terminals");
     let original = terminals[0];
     let clone = terminals[1];
 
@@ -171,7 +167,7 @@ function doTerminal(terminal, socket, args) {
     terminal.spellcheck = false;
     console.log("Connecting to server...");
 
-    let info = $("#info")[0];
+    let info = document.getElementById("info");
     if (info) {
         info.innerHTML = "Status: Connecting...";
         info.style.backgroundColor = "#ff357a";
@@ -392,7 +388,7 @@ function runCommand(comm, commands, terminal, socket) {
     }
 
     else {
-        let message = BSON.serialize({
+        let message = JSON.stringify({
             command: comm,
         });
         console.log('command:', message.command);
@@ -402,7 +398,7 @@ function runCommand(comm, commands, terminal, socket) {
         commNum += 1;
 
         if (comm == "zigzag-server") {
-            let terminals = $(".terminals");
+            let terminals = document.getElementsByClassName("terminals");
             if (terminals.length < 2) {
                 dup();
             }
@@ -415,10 +411,11 @@ function runCode(code, language, socket) {
     console.log('code:', code);
     console.log('language:', language);
 
-    let message = BSON.serialize({
+    let message = JSON.stringify({
         mode: 'code',
         code: code,
         language: language,
     });
     socket.send(message);
 }
+

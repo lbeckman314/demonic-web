@@ -9,65 +9,67 @@ body {
 }
 
 
-#terminal {
-  overflow: auto;
-  //width: 90%;
-  //height: 36em;
-  resize: both;
-  background-color: black;
-  color: white;
-  padding: 2%;
-  border: 1px dashed grey;
+#terminals {
+    width: 100%;
+    background-color: black;
+    color: white;
 }
 
-.terminals {
-  color: snow;
-  margin-bottom: 0;
-  height: 100%;
+.terminal {
+    color: snow;
+    margin: 0;
+    height: 100%;
+    padding: 2%;
+    overflow: auto;
+    height: 49vh;
+    resize: both;
+    border: 1px dashed grey;
 }
 
 pre#info {
-  margin-bottom: 0;
-  float: left;
-  font-size: 0.9em;
-  padding: 0.3em;
-  transition: 400ms;
-  color: black;
-  width: 40%;
+    margin-bottom: 0;
+    float: left;
+    font-size: 0.9em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    transition: 400ms;
+    color: black;
+    width: 100%;
 }
 
 div.demo-examples-container {
-  line-height: 1.7;
-  padding-bottom: 1.5%;
-  transition: 800ms;
+    line-height: 1.7;
+    padding-bottom: 1.5%;
+    transition: 800ms;
 }
 
 .demo-examples {
-  color: snow;
-  background-color: #4635f7;
-  border-radius: 0;
-  font-size: 0.9em;
-  margin-right: 0.5em;
-  margin-top: 0.5em;
-  cursor: pointer;
-  transition: 800ms;
-  display: inline-block;
-  padding: 0.5%;
+    color: snow;
+    background-color: #4635f7;
+    border-radius: 0;
+    font-size: 0.9em;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+    cursor: pointer;
+    transition: 800ms;
+    display: inline-block;
+    padding: 0.5%;
 }
 
 .demo-examples:hover {
-  background-color: #ff357a;
-  transition: 800ms;
+    background-color: #ff357a;
+    transition: 800ms;
 }
 
 .what-is-this {
-  margin-bottom: 15%;
-  float: right;
+    float: right;
+    font-size: 0.9em;
+    margin-top: 0.5em;
 }
 
 .CodeMirror {
-  border: 1px solid #eee;
-  height: auto;
+    border: 1px solid #eee;
+    height: auto;
 }
 
 a {
@@ -79,4 +81,29 @@ p, li {
     line-height: 2;
     font-family: DejaVu Serif;
     color: snow;
+}
+#duplicate-terminal:hover {
+    background-color: #4635f7;
+    border: 1px solid #4635f7;
+    transition: 800ms;
+    cursor: pointer;
+}
+#remove-terminal:hover {
+    background-color: crimson;
+    border: 1px solid crimson;
+    transition: 800ms;
+    cursor: pointer;
+}
+#duplicate-terminal, #remove-terminal {
+    border: 1px dashed grey;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    margin-top: 0.5em;
+    transition: 800ms;
+    color: snow;
+    font-size: 1em;
+    line-height: 1.7;
 }

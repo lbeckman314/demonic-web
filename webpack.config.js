@@ -3,7 +3,6 @@ const webpack = require('webpack');
 module.exports = {
     entry: {
         demo: './demo.js',
-        codemirror: './demo-codemirror.js',
     },
     output: {
         path: __dirname,
@@ -19,13 +18,5 @@ module.exports = {
         port: 5000
     },
     cache: true,
-    module: {
-        rules: [
-            {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader'],
-            },
-        ],
-    },
 };
 

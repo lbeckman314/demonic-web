@@ -1,17 +1,15 @@
 {
     "name": "demo-web",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "",
     "main": "demo.js",
     "directories": {
         "lib": "lib"
     },
     "scripts": {
-        "start": "nodemon -e js,ejs,json,scss,css,md index.js",
-        "test": "node test.js",
         "dev": "webpack --config webpack.config.js --mode development",
         "watch": "webpack --config webpack.config.js --mode development --watch",
-        "analyze": "webpack --config webpack.config.js --mode production --profile --json > stats.json",
+        "analyze": "webpack --config webpack.config.js --mode production --profile --json > stats.json; webpack-bundle-analyzer stats.json",
         "build": "webpack --config webpack.config.js --mode production"
     },
     "author": "",
@@ -28,6 +26,7 @@
         "webpack-cli": "^3.3.4"
     },
     "devDependencies": {
-        "css-loader": "^3.0.0"
+        "css-loader": "^3.0.0",
+        "webpack-bundle-analyzer": "^3.3.2"
     }
 }
