@@ -1,7 +1,6 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
 // url linker
 import Autolinker from 'autolinker';
-// used mainly for the nice syntax
 const AU = require('ansi_up');
 const ansi_up = new AU.default;
 
@@ -103,7 +102,8 @@ function dup() {
     terminalContainer.appendChild(clone);
 
     // Create WebSocket connection.
-    const socket = getSocket();
+    let socket = new WebSocket('wss://liambeckman.com:8181', options);
+    //let socket = new WebSocket('wss://localhost:8181', options);
 
     doTerminal(clone, socket, {mode: 'command'});
 
@@ -237,6 +237,7 @@ function doTerminal(terminal, socket, args) {
                     let from_server = document.createElement("span");
                     from_server.className = "from_server";
                     from_server.innerHTML = message;
+                    from_server.contentEditable = false;
                     terminal.appendChild(from_server);
 
                     let user_input = document.createElement("span");
@@ -402,7 +403,6 @@ function runCommand(comm, commands, terminal, socket) {
     }
 }
 
-
 function runCode(code, language, socket) {
     console.log('code:', code);
     console.log('language:', language);
@@ -414,4 +414,3 @@ function runCode(code, language, socket) {
     });
     socket.send(message);
 }
-
