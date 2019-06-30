@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function bootup(args) {
     console.log('booting up');
     console.log('args:', args);
-    //let terminals = $(".terminals");
+
     let terminals = args.terminal;
     console.log('terminals:', terminals);
 
@@ -64,7 +64,7 @@ function bootup(args) {
     const interval = setInterval(function ping() {
         if (socket.isAlive === false) {
             socket = getSocket();
-            doTerminal(terminals[0], socket, args.mode);
+            doTerminal(terminals, socket, args.mode);
         }
 
         else {
@@ -153,9 +153,12 @@ function setCaret(el) {
     el.focus();
 }
 
+
 // main terminal function
 function doTerminal(terminal, socket, args) {
     console.log('doTerminal mode:', args.mode);
+    console.log('doTerminal args:', args);
+
     function heartbeat() {
         socket.isAlive = true;
     }
@@ -177,17 +180,43 @@ function doTerminal(terminal, socket, args) {
             info.style.backgroundColor = "#49ccd4";
         }
 
-        let userPrompt = lib.args().userPrompt;
+        let userPrompt = lib.args().userPrompt || '> ';
         let code = lib.args().code || args.code;
         let language = lib.args().language || args.language;
 
-        if (args.mode == 'code') {
+        let browser = false;
+
+        if (args.domain === 'browser') {
+            console.log('BROWSER');
+            console.log(args.code);
+
+            eval(args.code);
+            browser = true;
+            console.log('CHANGED BROWSER FLAG:', browser);
+            //socket.send('prompt');
+
+            let from_server = document.createElement("span");
+            from_server.className = "from_server";
+            from_server.innerHTML = userPrompt;
+            from_server.contentEditable = false;
+            terminal.appendChild(from_server);
+
+            let user_input = document.createElement("span");
+            user_input.className = "user_input";
+            user_input.innerHTML = "";
+            terminal.appendChild(user_input);
+
+            setCaret(terminal);
+        }
+
+        else if (args.mode == 'code') {
             //terminal.innerHTML = language + ': ' + code;
             runCode(code, language, socket);
         }
+
         else {
             if (terminal.innerHTML == "") {
-                terminal.innerHTML = "> " + userPrompt;
+                terminal.innerHTML = userPrompt;
             }
         }
 
@@ -200,6 +229,7 @@ function doTerminal(terminal, socket, args) {
         let up = 0;
         let down = 0;
         let ctrl = false;
+
 
         // Listen for messages
         socket.onmessage = (event) => {
