@@ -9,13 +9,13 @@ body {
 }
 
 
-#terminals {
+#terminal {
     width: 100%;
     background-color: black;
     color: white;
 }
 
-.terminal {
+.terminals {
     color: snow;
     margin: 0;
     height: 100%;
