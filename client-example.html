@@ -4,15 +4,19 @@
         <meta charset="utf-8" />
         <title>client-example</title>
         <script src="demo.bundle.js"></script>
-        <script type="text/javascript">Demo.lib.init({boot: true});</script>
+        <script type="text/javascript">Demo.lib.init({
+            command: 'ls',
+            userPrompt: '> ',
+            boot: true,
+        });</script>
         <link rel="stylesheet" href="demo.css">
     </head>
     <body>
         <h1 id="terminal">Demo Terminal</h1>
 
         <pre id="info"></pre>
-        <div id="terminals">
-            <pre class="terminal" tabindex="0" spellcheck="false" contenteditable="true"></pre>
+        <div id="terminal">
+            <pre class="terminals" tabindex="0" spellcheck="false" contenteditable="true"></pre>
         </div>
 
         <div id="button-container">

@@ -37,7 +37,7 @@ function bootup(args) {
     console.log('booting up');
     console.log('args:', args);
     //let terminals = $(".terminals");
-    let terminals = args.terminal;
+    let terminals = args.terminal || document.getElementsByClassName('terminals')[0];
     console.log('terminals:', terminals);
 
     let duplicateTerminal = document.getElementById("duplicate-terminal");
@@ -159,6 +159,7 @@ function doTerminal(terminal, socket, args) {
     function heartbeat() {
         socket.isAlive = true;
     }
+    console.log('terminal:', terminal);
 
     terminal.spellcheck = false;
     console.log("Connecting to server...");
@@ -177,17 +178,28 @@ function doTerminal(terminal, socket, args) {
             info.style.backgroundColor = "#49ccd4";
         }
 
-        let userPrompt = lib.args().userPrompt;
+        let command = lib.args().command || '';
+        let userPrompt = lib.args().userPrompt || '> ';
         let code = lib.args().code || args.code;
         let language = lib.args().language || args.language;
 
         if (args.mode == 'code') {
             //terminal.innerHTML = language + ': ' + code;
-            runCode(code, language, socket);
+            console.log('DOMAIN:', args.domain)
+            if (args.domain === 'browser') {
+                terminal.innerHTML += eval(code);
+                //console.log('EVAL:', eval(code));
+                //eval(code);
+                socket.send('prompt');
+            }
+            else {
+                runCode(code, language, socket);
+            }
         }
         else {
-            if (terminal.innerHTML == "") {
-                terminal.innerHTML = "> " + userPrompt;
+            console.log('YUP:', terminal.innerText.length);
+            if (terminal.innerText.length == 0) {
+                terminal.innerHTML = userPrompt + command;
             }
         }
 
@@ -215,10 +227,11 @@ function doTerminal(terminal, socket, args) {
 
                 if (message == "pong") {
                     heartbeat();
+                    console.log('pong.');
                     return;
                 }
 
-                if (message.includes('\r')) {
+                else if (message.includes('\r')) {
                     message = message.replace(/\r/g,"");
                     terminal.innerHTML = terminal.innerHTML.replace(/.*$/, message);
                 }
@@ -246,13 +259,12 @@ function doTerminal(terminal, socket, args) {
                     terminal.appendChild(user_input);
 
                     setCaret(terminal);
+                    terminal.scrollTop = terminal.scrollHeight;
                 }
             });
 
             reader.readAsText(myblob);
-
             messages = message.split("\n");
-            terminal.scrollTop = terminal.scrollHeight;
             zigzagPort(message);
         }
 
@@ -285,8 +297,7 @@ function doTerminal(terminal, socket, args) {
             else if ( key == 85 && ctrl ) {
                 console.log("Ctrl + U Pressed !");
                 e.preventDefault();
-                terminal.innerHTML = terminal.innerHTML.replace(/.*$/,
-                    "&gt ");
+                terminal.innerHTML = terminal.innerHTML.replace(/.*$/, userPrompt);
                 setCaret(terminal);
             }
         },false);
@@ -354,13 +365,15 @@ function doTerminal(terminal, socket, args) {
                 if (comm == null) {
                     // only use last line
                     comm = lines[lines.length-1];
-                    // remove > prompt
+                    // remove user prompt
                     comm = comm.replace(/\> /g, "");
+                    comm = comm.replace(/\$ /g, "");
+                    comm = comm.replace(/\: /g, "");
                     // remove leading spaces
                     comm = comm.replace(/^[ ]*/g, "");
                 }
 
-                runCommand(comm, commands, terminal, socket);
+                runCommand(comm, commands, commNum, terminal, socket);
                 terminal.scrollTop = terminal.scrollHeight;
             }
 
@@ -369,7 +382,7 @@ function doTerminal(terminal, socket, args) {
     }
 }
 
-function runCommand(comm, commands, terminal, socket) {
+function runCommand(comm, commands, commNum, terminal, socket) {
     console.log("you entered:", comm);
 
     if (comm == "clear") {
@@ -414,3 +427,5 @@ function runCode(code, language, socket) {
     });
     socket.send(message);
 }
+
+
