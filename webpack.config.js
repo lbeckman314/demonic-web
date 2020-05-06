@@ -2,12 +2,12 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        demo: './demo.js',
+        web: './web.js',
     },
     output: {
         path: __dirname,
         filename: './[name].bundle.js',
-        library: "Demo",
+        library: "Web",
         libraryTarget: "umd",
         chunkFilename: '[name]-[chunkhash].js'
     },
@@ -18,5 +18,13 @@ module.exports = {
         port: 5000
     },
     cache: true,
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
+        ],
+    },
 };
 
