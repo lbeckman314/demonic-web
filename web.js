@@ -1,5 +1,6 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
+import { WebLinksAddon } from 'xterm-addon-web-links';
 import 'xterm/css/xterm.css';
 export {init};
 export {bootup};
@@ -53,7 +54,7 @@ function bootup(args) {
 
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
-    fitAddon.fit();
+    term.loadAddon(new WebLinksAddon());
     elem.addEventListener('click', () => fitAddon.fit());
 
     const userPrompt = args.userPrompt || '> ';
@@ -80,7 +81,7 @@ function bootup(args) {
         });
     }
 
-    const url = 'ws://localhost:8181';
+    const url = 'wss://liambeckman.com:8181';
     const ws = new WebSocket(url);
     ws.onopen = (event) => {
         fitAddon.fit();
