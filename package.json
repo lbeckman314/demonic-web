@@ -1,40 +1,24 @@
 {
     "name": "demo-web",
     "version": "0.1.0",
-    "description": "",
-    "main": "demo.js",
-    "directories": {
-        "lib": "lib"
-    },
+    "description": "Demonic client for running commands and code snippets in a sandboxed environment.",
+    "license": "Apache-2.0",
+    "main": "web.js",
     "scripts": {
+        "build": "webpack --config webpack.config.js --mode production",
         "dev": "webpack --config webpack.config.js --mode development",
-        "watch": "webpack --config webpack.config.js --mode development --watch",
-        "analyze": "webpack --config webpack.config.js --mode production --profile --json > stats.json; webpack-bundle-analyzer stats.json",
-        "build": "webpack --config webpack.config.js --mode production"
+        "watch": "webpack --config webpack.config.js --mode development --watch"
     },
-    "author": "",
-    "license": "ISC",
     "dependencies": {
-        "ansi_up": "^4.0.3",
-        "autolinker": "^3.1.0",
-        "bson": "^4.0.2",
-        "cli-spinners": "^2.3.0",
-        "codemirror": "^5.48.0",
-        "fs": "0.0.1-security",
-        "jquery": "^3.4.1",
-        "ora": "^4.0.4",
-        "readline": "^1.3.0",
         "style-loader": "^0.23.1",
         "webpack": "^4.35.0",
-        "webpack-cli": "^3.3.4",
         "xterm": "^4.5.0",
         "xterm-addon-fit": "^0.3.0",
         "xterm-addon-web-links": "^0.3.0"
     },
     "devDependencies": {
         "css-loader": "^3.0.0",
-        "ts-node": "^8.9.1",
-        "typescript": "^3.8.3",
-        "webpack-bundle-analyzer": "^3.3.2"
+        "webpack-bundle-analyzer": "^3.3.2",
+        "webpack-cli": "^3.3.11"
     }
 }

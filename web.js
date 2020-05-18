@@ -4,6 +4,28 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import 'xterm/css/xterm.css';
 export {init};
 export {bootup};
+export {setLight};
+export {setDark};
+
+const darkTheme = {
+    brightMagenta: '#ed68d9',
+    brightGreen: '#5af78e',
+    brightBlue: '#678cfa',
+    brightCyan: '#9aedfe',
+    background: '#000000',
+    foreground: '#ffffff',
+    cursor: '#ffffff',
+};
+
+const lightTheme = {
+    brightMagenta: '#ed68d9',
+    brightGreen: '#5af78e',
+    brightBlue: '#678cfa',
+    brightCyan: '#678cfa',
+    background: '#fffafa',
+    foreground: '#000000',
+    cursor: '#000000',
+};
 
 const init = (() => {
     let _args = {};
@@ -59,16 +81,14 @@ function bootup(args) {
 
     const userPrompt = args.userPrompt || '> ';
 
-    term.setOption('theme', {
-        brightMagenta: '#ed68d9',
-        brightGreen: '#5af78e',
-        brightBlue: '#678cfa',
-        brightCyan: '#9aedfe',
-    });
-
-    // const command = args.command || '';
     term.open(elem);
     term.write(userPrompt);
+
+    const theme = args.theme;
+    if (theme == 'light')
+        term.setOption('theme', lightTheme);
+    else
+        term.setOption('theme', darkTheme);
 
     const examples = document.getElementById('demonic-examples');
     if (examples != null) {
@@ -159,5 +179,13 @@ function deserialize(input) {
     const buff = new Buffer(input);
     const output = buff.toString('utf8');
     return output;
+}
+
+function setLight() {
+    map.forEach((value, key, map) => value.setOption('theme', lightTheme));
+}
+
+function setDark() {
+    map.forEach((value, key, map) => value.setOption('theme', darkTheme));
 }
 
