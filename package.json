@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Demonic client for running commands and code snippets in a sandboxed environment.",
     "license": "Apache-2.0",
-    "main": "web.js",
+    "main": "demo-web.js",
     "scripts": {
         "build": "webpack --config webpack.config.js --mode production",
         "dev": "webpack --config webpack.config.js --mode development",

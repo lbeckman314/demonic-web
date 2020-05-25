@@ -4,7 +4,7 @@
 
 A web-based client for running commands and code snippets in a sandboxed environment.
 
-[![web client](./web.png)](https://liambeckman.com/code/#interactive-demos)
+[![web client](./demo-web.png)](https://liambeckman.com/code/#interactive-demos)
 
 ## Installation
 

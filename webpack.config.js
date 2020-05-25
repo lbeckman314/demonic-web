@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        web: './web.js',
+        web: './demo-web.js',
     },
     output: {
         path: __dirname,
