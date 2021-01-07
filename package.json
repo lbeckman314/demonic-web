@@ -1,5 +1,5 @@
 {
-    "name": "demo-web",
+    "name": "demonic-web",
     "version": "0.1.2",
     "description": "Demonic web client for running commands and code snippets in a sandboxed environment.",
     "license": "Apache-2.0",
