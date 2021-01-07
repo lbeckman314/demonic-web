@@ -1,0 +1,71 @@
+.demonic-web {
+    height: 25em;
+    background-color: white;
+    color: black;
+    line-height: normal;
+    border: 1px solid gray;
+    resize: both;
+    overflow: auto;
+    position: relative;
+}
+
+#status {
+    transition: 800ms;
+    background-color: #ff357a;
+    font-size: small;
+    font-weight: bold;
+    padding: 0.5em;
+    color: white;
+}
+
+#status.connected {
+    background-color: #49ccd4;
+}
+
+div#demonic-examples {
+    color: white;
+    line-height: 1.7;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    transition: 800ms;
+}
+
+#demonic-examples > code {
+    background-color: #29208e;
+    border-radius: 0;
+    margin: 0.5em;
+    cursor: pointer;
+    transition: 800ms;
+    display: inline-block;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+
+#demonic-examples > code:hover {
+    background-color: #FF357A;
+    transition: 800ms;
+}
+
+.terminal.xterm {
+    padding: 1em;
+}
+
+.what-is-this {
+    text-align: right;
+    margin-top: 1.5em;
+    color: gray;
+}
+
+.what-is-this > a {
+    text-decoration: none;
+}
+
+.what-is-this > a:hover {
+    text-decoration: underline;
+}
+
+#terminal-container {
+    padding-bottom: 10%;
+}
+

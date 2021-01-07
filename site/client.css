@@ -1,0 +1,34 @@
+body {
+    height: 100%;
+    background-color: #131516;
+    font-family: DejaVu Sans, Liberation Sans, Ariral;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h1, p, div {
+    color: white;
+}
+
+a {
+    color: #FF357A;
+    text-decoration: underline wavy #49CCD4;
+}
+
+#title {
+    padding-bottom: 1em;
+    display: flex;
+    align-items: center;
+}
+
+#title > h1 {
+    padding-left: 0.5em;
+}
+
+#title > img {
+    width: 10em;
+}
+
+

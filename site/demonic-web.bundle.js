@@ -1,0 +1,1 @@
+../build/demonic-web.bundle.js
