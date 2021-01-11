@@ -2,14 +2,15 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        web: './src/demonic-web.js',
+        web: './src/cerberus.js',
     },
     output: {
         path: __dirname,
         filename: './dist/demonic-[name].bundle.js',
-        library: 'Demonic',
+        library: 'DemonicWeb',
         libraryTarget: 'umd',
-        chunkFilename: '[name]-[chunkhash].js'
+        chunkFilename: '[name]-[chunkhash].js',
+        globalObject: 'this',
     },
     watchOptions: {
         poll: true

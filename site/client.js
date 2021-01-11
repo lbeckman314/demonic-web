@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
-    Demonic.bootup({
-        data: 'ls',
-    });
+DemonicWeb.run({
+    data: 'ls',
+    url: 'ws://localhost:8181',
 });
 
