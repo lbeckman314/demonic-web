@@ -1,7 +1,6 @@
 .demonic-web {
     height: 25em;
-    background-color: white;
-    color: black;
+    background-color: black;
     line-height: normal;
     border: 1px solid gray;
     resize: both;
@@ -69,3 +68,61 @@ div#demonic-examples {
     padding-bottom: 10%;
 }
 
+.buttons {
+    position: absolute;
+    z-index: 100;
+    right: 1em;
+    top: 0;
+}
+
+.buttons > button {
+    color: white;
+}
+
+.dark-text > button {
+    color: black;
+}
+
+button {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    height: 2em;
+    cursor: pointer;
+    font-size: larger;
+    padding: 0.5em;
+}
+
+button:hover {
+    color: #FF357A;
+}
+
+.hide {
+    display: none;
+}
+
+.demonic-menu {
+    position: absolute;
+    top: 0;
+    right: 3em;
+    margin: 1em;
+    background: black;
+    color: white;
+    outline: 1px solid gray;
+    z-index: 100;
+    padding: 0;
+    font-size: smaller;
+}
+
+.demonic-menu > li {
+    padding: 1em 2em 1em 2em;
+    cursor: pointer;
+    list-style: none;
+}
+
+.demonic-menu > li:hover {
+    text-decoration: underline;
+}
+
+.close {
+    background-color: #AA0000;
+}

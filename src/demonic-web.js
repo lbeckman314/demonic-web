@@ -1,7 +1,6 @@
 export { DemonicWeb }
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { Terminal } from 'xterm';
 const events = require('events');
 
 class DemonicWeb {
@@ -32,6 +31,18 @@ class DemonicWeb {
         const buff = new Buffer(input);
         const output = buff.toString('utf8');
         return output;
+    }
+
+    getReadyState() {
+        return this.ws.readyState;
+    }
+
+    isOpen() {
+        return this.getReadyState() == WebSocket.OPEN;
+    }
+
+    clear() {
+        this.term.clear();
     }
 
     clearLine() {

@@ -2,6 +2,7 @@ body {
     height: 100%;
     background-color: #131516;
     font-family: DejaVu Sans, Liberation Sans, Ariral;
+    padding: 5% 10% 0 10%;
 }
 
 h1 {

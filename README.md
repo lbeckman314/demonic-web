@@ -1,17 +1,19 @@
-![demonic logo](./demonic.png)
+![demonic logo](./assets/demonic.png)
 
-# demonic web
+# demonic-web
 
-A web-based client for running commands and code snippets in a sandboxed environment.
+A web-based terminal for running commands and code snippets in a sandboxed environment.
 
-[![web client](./demo-web.png)](https://liambeckman.com/code/#interactive-demos)
+Try it out at [liambeckman.com/code/demonic](https://liambeckman.com/code/demonic).
+
+[![demonic in action](./assets/demonic-web.png)](https://liambeckman.com/code/demonic)
 
 ## Installation
 
 ```sh
 # get code
-git clone https://github.com/lbeckman314/demo-web
-cd demo-web
+git clone https://github.com/lbeckman314/demonic-web
+cd demonic-web
 
 # install dependencies
 npm install
@@ -20,14 +22,19 @@ npm install
 npm run build
 ```
 
-Upon opening 'client.html' in your favorite browser you'll have an example of the demonic web client sharing commands and output with the demonic server.
+Upon opening `site/client.html` in your favorite browser you'll have an example of the demonic web client sharing commands and output with the demonic server.
 
-![minimal client terminal](./client.png)
+![client terminal](./assets/client.png)
 
 # Uninstallation
 
 ```sh
 # remove this directory
-rm -rfI demo-docs
+rm -rf demonic-web
 ```
+# See Also
+
+- [Demonic-Server](https://github.com/lbeckman314/demonic-web): The backend for this client.
+- [Demonic-Docs](https://github.com/lbeckman314/demonic-docs): Integrates demonic-web into your documentation.
+
 

@@ -1,5 +1,4 @@
 export { run };
-export { setTheme };
 import '../assets/demonic-web.css';
 import 'xterm/css/xterm.css';
 import { DemonicWeb } from './demonic-web.js';
@@ -25,11 +24,9 @@ let lightTheme = {
     cursor:        '#000000',
 };
 
-let map = new Map();
-
 function run(args) {
     if (document.readyState == "complete" || document.readyState == "loaded")
-        bootup(args)
+        return bootup(args)
     else
         document.addEventListener('DOMContentLoaded', () => bootup(args));
 }
@@ -41,16 +38,11 @@ function bootup(args) {
     if (container == null)
         container = document.getElementsByClassName('demonic-web')[0];
 
-    if (map.has(container)) {
-        const demonic = map.get(container);
-        demonic.term.dispose();
-    }
-
     // xterm.js constructor
-    const term = new Terminal({
+    const terminal = new Terminal({
         convertEol: true,
     });
-    term.open(container);
+    terminal.open(container);
 
     // User prompt
     const MAGENTA='\x1b[1;35m';
@@ -59,53 +51,48 @@ function bootup(args) {
     const NC='\x1b[0m';
     const userPrompt = args.userPrompt ||
         `${CYAN}user${NC}${MAGENTA} @ ${NC}${CYAN}demonic${NC} ${GREEN}>${NC} `;
-    term.write(userPrompt);
+    terminal.write(userPrompt);
 
     // Command
-    const data = args.data || '';
-    term.write(data);
-    term.focus();
+    if (args.write != false)
+        terminal.write(args.data);
+    terminal.focus();
 
-    // Theme
-    const theme = args.theme;
+    const demonicWeb = new DemonicWeb(terminal, url, userPrompt);
+    demonicWeb.connect();
 
-    if (theme == 'light')
-        term.setOption('theme', lightTheme);
-    else
-        term.setOption('theme', darkTheme);
-
-    const demonic = new DemonicWeb(term, url, userPrompt);
-    map.set(container, demonic);
-
+    // Resize terminal
     new ResizeObserver(() => {
-        demonic.fit();
+        if (demonicWeb.getReadyState() == WebSocket.OPEN)
+            demonicWeb.fit();
     }).observe(container);
 
+    // Status Bar
+    let termElement = container.querySelector('.terminal');
     let statusBar = container.querySelector('#status');
     if (statusBar == null) {
         statusBar = document.createElement('div');
         statusBar.id = 'status';
-        const termElem = container.querySelector('.terminal');
-        container.insertBefore(statusBar, termElem);
+        container.insertBefore(statusBar, termElement);
     }
 
-    demonic.eventEmitter.addListener('connecting', () => {
+    // 'connecting' Event Listener
+    demonicWeb.eventEmitter.addListener('connecting', () => {
         statusBar.classList.remove('connected');
         statusBar.innerHTML = 'Status: Connecting...';
-        term.setOption('cursorBlink', false);
+        terminal.setOption('cursorBlink', false);
     });
 
-    demonic.connect();
-
+    // 'connected' Event Listener
     let init = true;
-    demonic.eventEmitter.addListener('connected', () => {
+    demonicWeb.eventEmitter.addListener('connected', () => {
         statusBar.classList.add('connected');
         statusBar.innerHTML = 'Status: Connected!';
 
-        term.setOption('cursorBlink', true);
+        terminal.setOption('cursorBlink', true);
 
         if (init) {
-            demonic.send(args);
+            demonicWeb.send(args);
             init = false;
         }
     });
@@ -119,22 +106,70 @@ function bootup(args) {
                 return;
             const data = example.innerHTML;
 
-            demonic.clearLine();
-            demonic.write(data);
-            demonic.send(data);
-            term.focus();
+            demonicWeb.clearLine();
+            demonicWeb.write(data);
+            demonicWeb.send(data);
+            terminal.focus();
         });
     }
 
-    return demonic;
-}
+    // Theme
+    let theme = (args.theme == 'light') ? lightTheme : darkTheme;
+    terminal.setOption('theme', theme);
 
-function setTheme(theme) {
-    if (theme == 'light')
-        theme = lightTheme;
-    else
-        theme = darkTheme;
+    // Buttons
+    let buttons = document.createElement('div');
+    buttons.className = 'buttons';
+    termElement.appendChild(buttons);
 
-    map.forEach(value => value.term.setOption('theme', theme));
+    // Menu Button
+    let menuBtn = document.createElement('button');
+    menuBtn.textContent = '☰';
+    menuBtn.title = 'Open Menu';
+    buttons.appendChild(menuBtn);
+
+    menuBtn.onclick = () => {
+        menu.classList.toggle('hide');
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target != menuBtn && !menu.contains(e.target))
+            menu.classList.add('hide');
+    });
+
+    terminal.onKey(e => {
+        // Escape Key
+        if (e.key == '\u001b')
+            menu.classList.add('hide');
+    });
+
+    let menu = document.createElement('ul');
+    menu.classList.add('demonic-menu');
+    menu.classList.add('hide');
+    termElement.appendChild(menu);
+
+    // Theme Button
+    let themeItem = document.createElement('li');
+    themeItem.textContent = '☯ Change Theme';
+    menu.appendChild(themeItem);
+
+    themeItem.onclick = () => {
+        theme = (theme == lightTheme) ? darkTheme : lightTheme;
+        terminal.setOption('theme', theme);
+        buttons.classList.toggle('dark-text');
+    }
+
+    // Close Button
+    let closeItem = document.createElement('li');
+    closeItem.textContent = '✕ Close Terminal';
+    closeItem.classList.add('close');
+    menu.appendChild(closeItem);
+
+    closeItem.onclick = () => {
+        demonicWeb.close();
+        container.remove();
+    }
+
+    return demonicWeb;
 }
 

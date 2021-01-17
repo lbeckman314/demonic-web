@@ -1,5 +1,5 @@
 DemonicWeb.run({
-    data: 'ls',
+    data: 'cmatrix | lolcat',
     url: 'ws://localhost:8181',
 });
 

@@ -10,7 +10,6 @@ module.exports = {
         library: 'DemonicWeb',
         libraryTarget: 'umd',
         chunkFilename: '[name]-[chunkhash].js',
-        globalObject: 'this',
     },
     watchOptions: {
         poll: true
