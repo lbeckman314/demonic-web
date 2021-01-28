@@ -1,6 +1,6 @@
 {
     "name": "demonic-web",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "description": "Demonic web client for running commands and code snippets in a sandboxed environment.",
     "license": "Apache-2.0",
     "main": "demo-web.js",
