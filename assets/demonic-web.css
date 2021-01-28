@@ -126,3 +126,8 @@ button:hover {
 .close {
     background-color: #AA0000;
 }
+
+.urlSpan {
+    float: right;
+    cursor: pointer;
+}

@@ -12,6 +12,7 @@ class DemonicWeb {
         this.ws = null;
         this.cmds = [];
         this.draw = true;
+        this.heartbeat = null;
 
         // WebLink addon
         term.loadAddon(new WebLinksAddon());
@@ -21,6 +22,9 @@ class DemonicWeb {
         term.loadAddon(fitAddon);
         this.fitAddon = fitAddon;
         this.fit();
+
+        // Add key listeners
+        this.addKeyListeners(term);
     }
 
     fit() {
@@ -78,93 +82,94 @@ class DemonicWeb {
 
     close() {
         this.ws.close();
+        clearInterval(this.heartbeat);
     }
 
     connect() {
         this.ws = this.createWebSocket(this.url);
 
-        setInterval(() => {
+        this.heartbeat = setInterval(() => {
             if (this.ws.readyState == WebSocket.CLOSED) {
                 this.clearLine();
                 this.ws = this.createWebSocket(this.url);
             }
         }, 2000);
+    }
 
+    addKeyListeners(term) {
         let cmdIndex = 0;
         let cmd = '';
-        this.term.onKey(e => {
+        term.onKey((e) => {
             // Escape
             if (e.key == '\u001b')
-                this.term.blur();
+                term.blur();
 
-            if (this.draw && this.ws.readyState == WebSocket.OPEN) {
-                switch (e.key) {
+            switch (e.key) {
                     // Enter
-                    case '\r':
-                        this.term.write('\n');
-                        cmdIndex = 0;
-                        break;
+                case '\r':
+                    term.write('\n');
+                    cmdIndex = 0;
+                    break;
 
                     // Backspace
-                    case '\u007f':
-                        if (!this.atPrompt())
-                            this.term.write('\b \b');
-                        break;
+                case '\u007f':
+                    if (!this.atPrompt())
+                        term.write('\b \b');
+                    break;
 
                     // Ctrl + l
-                    case '\u000c':
-                        this.term.clear();
-                        this.clearLine();
-                        break;
+                case '\u000c':
+                    term.clear();
+                    this.clearLine();
+                    break;
 
                     // Ctrl + a
-                    case '\u0001':
-                        break;
+                case '\u0001':
+                    break;
 
                     // Ctrl + e
-                    case '\u0005':
-                        break;
+                case '\u0005':
+                    break;
 
                     // Ctrl + u
-                    case '\u0015':
-                        this.clearLine();
-                        break;
+                case '\u0015':
+                    this.clearLine();
+                    break;
 
                     // Up arrow
-                    case '\u001b[A':
-                        this.clearLine();
-                        if (cmdIndex < this.cmds.length)
-                            cmdIndex += 1;
-                        cmd = this.cmds[this.cmds.length - cmdIndex];
-                        if (typeof cmd != 'undefined') {
-                            this.term.write(cmd);
-                            this.send(cmd);
-                        }
-                        break;
+                case '\u001b[A':
+                    this.clearLine();
+                    if (cmdIndex < this.cmds.length)
+                        cmdIndex += 1;
+                    cmd = this.cmds[this.cmds.length - cmdIndex];
+                    if (typeof cmd != 'undefined') {
+                        term.write(cmd);
+                        this.send(cmd);
+                    }
+                    break;
 
                     // Down arrow
-                    case '\u001b[B':
-                        this.clearLine();
-                        if (cmdIndex > 0)
-                            cmdIndex -= 1;
-                        cmd = this.cmds[this.cmds.length - cmdIndex];
-                        if (typeof cmd != 'undefined') {
-                            this.term.write(cmd);
-                            this.send(cmd);
-                        }
-                        break;
+                case '\u001b[B':
+                    this.clearLine();
+                    if (cmdIndex > 0)
+                        cmdIndex -= 1;
+                    cmd = this.cmds[this.cmds.length - cmdIndex];
+                    if (typeof cmd != 'undefined') {
+                        term.write(cmd);
+                        this.send(cmd);
+                    }
+                    break;
 
                     // Left arrow
-                    case '\u001b[D':
-                        if (!this.atPrompt())
-                            this.term.write(e.key);
-                        break;
+                case '\u001b[D':
+                    if (!this.atPrompt())
+                        term.write(e.key);
+                    break;
 
                     // All other keys
-                    default:
-                        cmdIndex = 0;
-                        this.term.write(e.key);
-                }
+                default:
+                    cmdIndex = 0;
+                    term.write(e.key);
             }
             this.send(e.key);
         });

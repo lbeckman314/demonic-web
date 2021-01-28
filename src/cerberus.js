@@ -50,7 +50,7 @@ function bootup(args) {
     const CYAN='\x1b[1;36m';
     const NC='\x1b[0m';
     const userPrompt = args.userPrompt ||
-        `${CYAN}user${NC}${MAGENTA} @ ${NC}${CYAN}demonic${NC} ${GREEN}>${NC} `;
+        `${CYAN}demo${NC}${MAGENTA} @ ${NC}${CYAN}demonic${NC} ${GREEN}>${NC} `;
     terminal.write(userPrompt);
 
     // Command
@@ -58,7 +58,7 @@ function bootup(args) {
         terminal.write(args.data);
     terminal.focus();
 
-    const demonicWeb = new DemonicWeb(terminal, url, userPrompt);
+    let demonicWeb = new DemonicWeb(terminal, url, userPrompt);
     demonicWeb.connect();
 
     // Resize terminal
@@ -67,7 +67,7 @@ function bootup(args) {
             demonicWeb.fit();
     }).observe(container);
 
-    // Status Bar
+    // Status bar
     let termElement = container.querySelector('.terminal');
     let statusBar = container.querySelector('#status');
     if (statusBar == null) {
@@ -76,18 +76,28 @@ function bootup(args) {
         container.insertBefore(statusBar, termElement);
     }
 
-    // 'connecting' Event Listener
+    // Current WebSocket address
+    let urlSpan = document.createElement('span');
+    urlSpan.innerHTML = url;
+    urlSpan.classList.add('urlSpan');
+    urlSpan.title = 'Set WebSocket Address';
+    urlSpan.innerHTML = url;
+    urlSpan.onclick = () => getNewUrl(demonicWeb, urlSpan);
+
+    // 'connecting' event listener
     demonicWeb.eventEmitter.addListener('connecting', () => {
         statusBar.classList.remove('connected');
         statusBar.innerHTML = 'Status: Connecting...';
+        statusBar.appendChild(urlSpan);
         terminal.setOption('cursorBlink', false);
     });
 
-    // 'connected' Event Listener
+    // 'connected' event listener
     let init = true;
     demonicWeb.eventEmitter.addListener('connected', () => {
         statusBar.classList.add('connected');
         statusBar.innerHTML = 'Status: Connected!';
+        statusBar.appendChild(urlSpan);
 
         terminal.setOption('cursorBlink', true);
 
@@ -122,7 +132,7 @@ function bootup(args) {
     buttons.className = 'buttons';
     termElement.appendChild(buttons);
 
-    // Menu Button
+    // Menu button
     let menuBtn = document.createElement('button');
     menuBtn.textContent = '☰';
     menuBtn.title = 'Open Menu';
@@ -138,7 +148,7 @@ function bootup(args) {
     });
 
     terminal.onKey(e => {
-        // Escape Key
+        // Escape key
         if (e.key == '\u001b')
             menu.classList.add('hide');
     });
@@ -148,7 +158,7 @@ function bootup(args) {
     menu.classList.add('hide');
     termElement.appendChild(menu);
 
-    // Theme Button
+    // Change theme button
     let themeItem = document.createElement('li');
     themeItem.textContent = '☯ Change Theme';
     menu.appendChild(themeItem);
@@ -159,7 +169,21 @@ function bootup(args) {
         buttons.classList.toggle('dark-text');
     }
 
-    // Close Button
+    // Toggle status button
+    let statusItem = document.createElement('li');
+    statusItem.textContent = '🛈 Toggle Status Bar';
+    menu.appendChild(statusItem);
+
+    statusItem.onclick = () => statusBar.classList.toggle('hide');
+
+    // Set WebSocket address button
+    let wsItem = document.createElement('li');
+    wsItem.textContent = '✉ Set WebSocket Address';
+    menu.appendChild(wsItem);
+
+    wsItem.onclick = () => getNewUrl(demonicWeb, urlSpan);
+
+    // Close button
     let closeItem = document.createElement('li');
     closeItem.textContent = '✕ Close Terminal';
     closeItem.classList.add('close');
@@ -171,5 +195,16 @@ function bootup(args) {
     }
 
     return demonicWeb;
+}
+
+function getNewUrl(demonicWeb, urlSpan) {
+    let url = prompt('Enter WebSocket Address:', demonicWeb.url);
+    if (url != null) {
+        urlSpan.innerHTML = url;
+
+        demonicWeb.close();
+        demonicWeb.url = url;
+        demonicWeb.connect();
+    }
 }
 
