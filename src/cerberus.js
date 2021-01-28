@@ -32,7 +32,7 @@ function run(args) {
 }
 
 function bootup(args) {
-    const url = args.url || 'wss://liambeckman.com/8181';
+    const url = args.url || 'wss://liambeckman.com:8181';
 
     let container = args.elem;
     if (container == null)
