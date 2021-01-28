@@ -104,6 +104,14 @@ class DemonicWeb {
             if (e.key == '\u001b')
                 term.blur();
 
+            if (!this.isOpen)
+                return;
+
+            this.send(e.key);
+
+            if (!this.draw)
+                return;
+
             switch (e.key) {
                     // Enter
                 case '\r':
@@ -171,7 +179,6 @@ class DemonicWeb {
                     cmdIndex = 0;
                     term.write(e.key);
             }
-            this.send(e.key);
         });
     }
 
@@ -247,4 +254,3 @@ class DemonicWeb {
         return ws;
     }
 }
-

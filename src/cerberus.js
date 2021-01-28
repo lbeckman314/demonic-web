@@ -75,6 +75,8 @@ function bootup(args) {
         statusBar.id = 'status';
         container.insertBefore(statusBar, termElement);
     }
+    if (args.statusBar == false)
+        statusBar.classList.add('hide');
 
     // Current WebSocket address
     let urlSpan = document.createElement('span');
