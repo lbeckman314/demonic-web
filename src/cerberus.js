@@ -185,6 +185,13 @@ function bootup(args) {
 
     wsItem.onclick = () => getNewUrl(demonicWeb, urlSpan);
 
+    // Fullscreen button
+    let fullItem = document.createElement('li');
+    fullItem.textContent = '⛶ Toggle Fullscreen';
+    menu.appendChild(fullItem);
+
+    fullItem.onclick = () => container.classList.toggle('fullscreen');
+
     // Close button
     let closeItem = document.createElement('li');
     closeItem.textContent = '✕ Close Terminal';
