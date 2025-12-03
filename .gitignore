@@ -1,9 +1,11 @@
 *.pem
-node_modules/
-config.js
 *.sw*
-programs/
+config.js
+dist/
 files/
-virtual/
+node_modules/
+programs/
 tags
 tmp/demo.*
+virtual/
+
