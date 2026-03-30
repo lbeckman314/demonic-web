@@ -1,8 +1,8 @@
-export { run };
+export default { DemonicWeb, run };
 import '../assets/demonic-web.css';
-import 'xterm/css/xterm.css';
+import '@xterm/xterm/css/xterm.css';
 import { DemonicWeb } from './demonic-web.js';
-import { Terminal } from 'xterm';
+import { Terminal } from '@xterm/xterm';
 
 let darkTheme = {
     brightMagenta: '#ed68d9',
@@ -25,7 +25,7 @@ let lightTheme = {
 };
 
 function run(args) {
-    if (document.readyState == "complete" || document.readyState == "loaded")
+    if (document.readyState == "complete" || document.readyState == "interactive")
         return bootup(args)
     else
         document.addEventListener('DOMContentLoaded', () => bootup(args));
@@ -73,7 +73,7 @@ function bootup(args) {
     if (statusBar == null) {
         statusBar = document.createElement('div');
         statusBar.id = 'status';
-        container.insertBefore(statusBar, termElement);
+        container.parentElement.insertBefore(statusBar, container);
     }
     if (args.statusBar == false)
         statusBar.classList.add('hide');
@@ -91,7 +91,7 @@ function bootup(args) {
         statusBar.classList.remove('connected');
         statusBar.innerHTML = 'Status: Connecting...';
         statusBar.appendChild(urlSpan);
-        terminal.setOption('cursorBlink', false);
+        terminal.options.cursorBlink = false;
     });
 
     // 'connected' event listener
@@ -101,7 +101,7 @@ function bootup(args) {
         statusBar.innerHTML = 'Status: Connected!';
         statusBar.appendChild(urlSpan);
 
-        terminal.setOption('cursorBlink', true);
+        terminal.options.cursorBlink = true;
 
         if (init) {
             demonicWeb.send(args);
@@ -127,7 +127,7 @@ function bootup(args) {
 
     // Theme
     let theme = (args.theme == 'light') ? lightTheme : darkTheme;
-    terminal.setOption('theme', theme);
+    terminal.options.theme = theme;
 
     // Buttons
     let buttons = document.createElement('div');
@@ -160,27 +160,16 @@ function bootup(args) {
     menu.classList.add('hide');
     termElement.appendChild(menu);
 
-    // Change theme button
-    let themeItem = document.createElement('li');
-    themeItem.textContent = '☯ Change Theme';
-    menu.appendChild(themeItem);
-
-    themeItem.onclick = () => {
-        theme = (theme == lightTheme) ? darkTheme : lightTheme;
-        terminal.setOption('theme', theme);
-        buttons.classList.toggle('dark-text');
-    }
-
     // Toggle status button
     let statusItem = document.createElement('li');
-    statusItem.textContent = '🛈 Toggle Status Bar';
+    statusItem.textContent = 'ⓘ Toggle Status Bar';
     menu.appendChild(statusItem);
 
     statusItem.onclick = () => statusBar.classList.toggle('hide');
 
     // Set WebSocket address button
     let wsItem = document.createElement('li');
-    wsItem.textContent = '✉ Set WebSocket Address';
+    wsItem.textContent = '⚙ Set WebSocket Address';
     menu.appendChild(wsItem);
 
     wsItem.onclick = () => getNewUrl(demonicWeb, urlSpan);
@@ -191,17 +180,6 @@ function bootup(args) {
     menu.appendChild(fullItem);
 
     fullItem.onclick = () => container.classList.toggle('fullscreen');
-
-    // Close button
-    let closeItem = document.createElement('li');
-    closeItem.textContent = '✕ Close Terminal';
-    closeItem.classList.add('close');
-    menu.appendChild(closeItem);
-
-    closeItem.onclick = () => {
-        demonicWeb.close();
-        container.remove();
-    }
 
     return demonicWeb;
 }
@@ -216,4 +194,3 @@ function getNewUrl(demonicWeb, urlSpan) {
         demonicWeb.connect();
     }
 }
-

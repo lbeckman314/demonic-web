@@ -4,7 +4,6 @@
     line-height: normal;
     border: 1px solid gray;
     resize: both;
-    overflow: auto;
     position: relative;
 }
 
@@ -38,6 +37,7 @@ div#demonic-examples {
     display: inline-block;
     padding: 0.5em;
     font-weight: bold;
+    max-width: 100%;
 }
 
 
@@ -83,10 +83,13 @@ div#demonic-examples {
     color: black;
 }
 
+div.buttons {
+  padding-top: 0em !important;
+}
+
 button {
     background-color: rgba(0, 0, 0, 0);
     border: none;
-    height: 2em;
     cursor: pointer;
     font-size: larger;
     padding: 0.5em;
@@ -139,3 +142,10 @@ button:hover {
     height: 100%;
     width: 100%;
 }
+
+#demonic {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+

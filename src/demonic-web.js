@@ -1,6 +1,6 @@
 export { DemonicWeb }
-import { FitAddon } from 'xterm-addon-fit';
-import { WebLinksAddon } from 'xterm-addon-web-links';
+import { FitAddon } from '@xterm/addon-fit';
+import { WebLinksAddon } from '@xterm/addon-web-links';
 const events = require('events');
 
 class DemonicWeb {
@@ -32,7 +32,7 @@ class DemonicWeb {
     }
 
     deserialize(input) {
-        const buff = new Buffer(input);
+        const buff = new Buffer.from(input);
         const output = buff.toString('utf8');
         return output;
     }
