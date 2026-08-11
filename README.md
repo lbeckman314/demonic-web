@@ -1,4 +1,4 @@
-![demonic logo](./assets/demonic.png)
+![demonic logo](https://github.com/user-attachments/assets/9f8a0681-379d-4a5b-b053-7d3869d907f4)
 
 # demonic-web
 
@@ -6,7 +6,7 @@ A web-based terminal for running commands and code snippets in a sandboxed envir
 
 Try it out at [liambeckman.com/code/demonic](https://liambeckman.com/code/demonic).
 
-[![demonic in action](./assets/demonic-web.png)](https://liambeckman.com/code/demonic)
+[![demonic in action](https://github.com/user-attachments/assets/fca462a7-8e06-46a3-ab31-6c7ecfcc77bc)](https://liambeckman.com/code/demonic)
 
 ## Installation
 
