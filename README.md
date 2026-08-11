@@ -24,7 +24,7 @@ npm run build
 
 Upon opening `site/client.html` in your favorite browser you'll have an example of the demonic web client sharing commands and output with the demonic server.
 
-![client terminal](./assets/client.png)
+![client terminal](https://github.com/user-attachments/assets/21f6966e-ba56-46da-a8cf-cf8c454bacfd)
 
 # Uninstallation
 
@@ -36,5 +36,3 @@ rm -rf demonic-web
 
 - [Demonic-Server](https://github.com/lbeckman314/demonic-web): The backend for this client.
 - [Demonic-Docs](https://github.com/lbeckman314/demonic-docs): Integrates demonic-web into your documentation.
-
-
