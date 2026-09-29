@@ -1,9 +1,20 @@
 {
     "name": "demonic-web",
-    "version": "0.1.8",
+    "version": "0.2.0",
     "description": "Demonic web client for running commands and code snippets in a sandboxed environment.",
     "license": "Apache-2.0",
-    "main": "demo-web.js",
+    "main": "dist/demonic-terminal.js",
+    "exports": {
+        ".": "./dist/demonic-terminal.js",
+        "./legacy": "./dist/demonic-web.bundle.js",
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist/*.js",
+        "dist/*.txt",
+        "src",
+        "assets/*.css"
+    ],
     "scripts": {
         "build": "webpack --config webpack.config.js --mode production",
         "dev": "webpack --config webpack.config.js --mode development",

@@ -3,26 +3,8 @@ import '../assets/demonic-web.css';
 import '@xterm/xterm/css/xterm.css';
 import { DemonicWeb } from './demonic-web.js';
 import { Terminal } from '@xterm/xterm';
-
-let darkTheme = {
-    brightMagenta: '#ed68d9',
-    brightGreen:   '#5af78e',
-    brightBlue:    '#678cfa',
-    brightCyan:    '#9aedfe',
-    background:    '#000000',
-    foreground:    '#ffffff',
-    cursor:        '#ffffff',
-};
-
-let lightTheme = {
-    brightMagenta: '#ed68d9',
-    brightGreen:   '#008000',
-    brightBlue:    '#678cfa',
-    brightCyan:    '#02bfe5',
-    background:    '#fffafa',
-    foreground:    '#000000',
-    cursor:        '#000000',
-};
+import { darkTheme, lightTheme, defaultPrompt } from './themes.js';
+import { showAttribution } from './attribution.js';
 
 function run(args) {
     if (document.readyState == "complete" || document.readyState == "interactive")
@@ -45,12 +27,7 @@ function bootup(args) {
     terminal.open(container);
 
     // User prompt
-    const MAGENTA='\x1b[1;35m';
-    const GREEN='\x1b[1;32m';
-    const CYAN='\x1b[1;36m';
-    const NC='\x1b[0m';
-    const userPrompt = args.userPrompt ||
-        `${CYAN}demo${NC}${MAGENTA} @ ${NC}${CYAN}demonic${NC} ${GREEN}>${NC} `;
+    const userPrompt = args.userPrompt || defaultPrompt;
     terminal.write(userPrompt);
 
     // Command
@@ -194,38 +171,6 @@ function bootup(args) {
     fullItem.onclick = () => container.classList.toggle('fullscreen');
 
     return demonicWeb;
-}
-
-// Show "Running <name> by <author> (<license>)" in 'elem', with the name
-// linked to the program's URL, or clear it when 'meta' is null. Built with
-// textContent so values from the server are never parsed as HTML.
-function showAttribution(elem, meta) {
-    elem.replaceChildren();
-    if (meta == null)
-        return;
-
-    elem.append('Running ');
-
-    let name = document.createElement('span');
-    let url = null;
-    try {
-        url = meta.url ? new URL(meta.url) : null;
-    } catch (err) {
-        url = null;
-    }
-    if (url && (url.protocol == 'https:' || url.protocol == 'http:')) {
-        name = document.createElement('a');
-        name.href = url.href;
-        name.target = '_blank';
-        name.rel = 'noopener noreferrer';
-    }
-    name.textContent = meta.name;
-    elem.append(name);
-
-    if (meta.author)
-        elem.append(` by ${meta.author}`);
-    if (meta.license)
-        elem.append(` (${meta.license})`);
 }
 
 function getNewUrl(demonicWeb, urlSpan) {

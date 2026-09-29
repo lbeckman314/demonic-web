@@ -1,0 +1,142 @@
+/* Styles for <demonic-terminal>. Every rule is scoped to the element so it
+   cannot affect the page around it. Customize with these properties:
+     --demonic-height        height of the terminal screen (default 25em)
+     --demonic-font-family   font of the status bar and buttons */
+
+demonic-terminal {
+    display: block;
+}
+
+demonic-terminal .demonic-terminal {
+    --demonic-bg: #000000;
+    --demonic-fg: #ffffff;
+    --demonic-border: #555555;
+    --demonic-accent: #ff357a;
+    --demonic-connected: #49ccd4;
+    --demonic-example-bg: #29208e;
+
+    border: 1px solid var(--demonic-border);
+    background: var(--demonic-bg);
+    color: var(--demonic-fg);
+    font-family: var(--demonic-font-family, inherit);
+}
+
+demonic-terminal .demonic-terminal[data-theme="light"] {
+    --demonic-bg: #fffafa;
+    --demonic-fg: #000000;
+    --demonic-border: #bbbbbb;
+    --demonic-example-bg: #e3e0ff;
+}
+
+demonic-terminal .demonic-status {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.4em 0.6em;
+    background: var(--demonic-accent);
+    color: #ffffff;
+    font-size: small;
+    font-weight: bold;
+    transition: background-color 800ms;
+}
+
+demonic-terminal .demonic-status.demonic-connected {
+    background: var(--demonic-connected);
+}
+
+demonic-terminal .demonic-attribution {
+    flex: 1;
+    font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+demonic-terminal .demonic-attribution a {
+    color: inherit;
+}
+
+demonic-terminal button {
+    font: inherit;
+    cursor: pointer;
+}
+
+demonic-terminal .demonic-fullscreen {
+    margin-left: auto;
+    padding: 0 0.3em;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: large;
+    line-height: 1;
+}
+
+demonic-terminal .demonic-screen {
+    position: relative;
+    box-sizing: border-box;
+    height: var(--demonic-height, 25em);
+    padding: 0.5em;
+    line-height: normal;
+}
+
+demonic-terminal .demonic-screen .xterm {
+    height: 100%;
+}
+
+demonic-terminal .demonic-start {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: max-content;
+    height: max-content;
+    padding: 0.8em 1.4em;
+    border: 1px solid var(--demonic-accent);
+    border-radius: 4px;
+    background: none;
+    color: var(--demonic-fg);
+    font-size: medium;
+}
+
+demonic-terminal .demonic-start:hover,
+demonic-terminal .demonic-start:focus-visible {
+    background: var(--demonic-accent);
+    color: #ffffff;
+}
+
+demonic-terminal .demonic-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 0.6em;
+    border-top: 1px solid var(--demonic-border);
+}
+
+demonic-terminal .demonic-example {
+    padding: 0.4em 0.7em;
+    border: none;
+    background: var(--demonic-example-bg);
+    color: var(--demonic-fg);
+    font-family: monospace;
+    font-weight: bold;
+    transition: background-color 300ms;
+}
+
+demonic-terminal .demonic-example:hover,
+demonic-terminal .demonic-example:focus-visible {
+    background: var(--demonic-accent);
+    color: #ffffff;
+}
+
+/* Full screen: cover the viewport. */
+demonic-terminal .demonic-terminal.demonic-fullscreen-on {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+demonic-terminal .demonic-fullscreen-on .demonic-screen {
+    flex: 1;
+    height: auto;
+}

@@ -1,26 +1,25 @@
+const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+module.exports = (env, argv) => ({
     entry: {
-        web: './src/cerberus.js',
+        // <demonic-terminal> custom element (the package's main entry).
+        'demonic-terminal': './src/demonic-terminal.js',
+        // run() API with the original page-wide markup and styles.
+        'demonic-web.bundle': './src/cerberus.js',
     },
     experiments: {
         outputModule: true,
     },
     output: {
-        path: __dirname,
-        filename: './dist/demonic-[name].bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].js',
         library: {
             type: 'module',
         },
         chunkFilename: '[name]-[chunkhash].js',
     },
     plugins: [
-        // Work around for Buffer is undefined:
-        // https://github.com/webpack/changelog-v5/issues/10
-        new webpack.ProvidePlugin({
-            Buffer: ['buffer', 'Buffer'],
-        }),
         new webpack.ProvidePlugin({
             process: 'process/browser',
         }),
@@ -29,7 +28,6 @@ module.exports = {
         extensions: [ '.ts', '.js', '.mjs' ],
         fallback: {
             "process/browser": require.resolve("process/browser"),
-            "buffer": require.resolve("buffer")
         }
     },
     watchOptions: {
@@ -37,7 +35,9 @@ module.exports = {
     },
     target: 'web',
     watch: false,
-    devtool: 'eval-source-map',
+    // eval-based source maps are for development only: they bloat the
+    // bundle and are blocked by Content-Security-Policy without 'unsafe-eval'.
+    devtool: argv.mode == 'production' ? false : 'eval-source-map',
     devServer: {
         port: 5000
     },
@@ -50,5 +50,4 @@ module.exports = {
             },
         ],
     },
-};
-
+});
