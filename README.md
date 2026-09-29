@@ -26,6 +26,10 @@ Upon opening `site/client.html` in your favorite browser you'll have an example 
 
 ![client terminal](https://github.com/user-attachments/assets/21f6966e-ba56-46da-a8cf-cf8c454bacfd)
 
+## Attribution
+
+When the server sends attribution for a program (its `author`, `url` and `license` from the server's `process.yaml`), the status bar shows "Running *name* by *author* (*license*)", with the name linked to the program's page, until the program exits.
+
 # Uninstallation
 
 ```sh

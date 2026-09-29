@@ -86,11 +86,22 @@ function bootup(args) {
     urlSpan.innerHTML = url;
     urlSpan.onclick = () => getNewUrl(demonicWeb, urlSpan);
 
+    // Attribution for the running program (author, license, link)
+    let attribution = document.createElement('span');
+    attribution.classList.add('attribution');
+
+    demonicWeb.eventEmitter.addListener('meta', (meta) => {
+        showAttribution(attribution, meta);
+        if (!statusBar.contains(attribution))
+            statusBar.appendChild(attribution);
+    });
+
     // 'connecting' event listener
     demonicWeb.eventEmitter.addListener('connecting', () => {
         statusBar.classList.remove('connected');
         statusBar.innerHTML = 'Status: Connecting...';
         statusBar.appendChild(urlSpan);
+        showAttribution(attribution, null);
         terminal.options.cursorBlink = false;
     });
 
@@ -100,6 +111,7 @@ function bootup(args) {
         statusBar.classList.add('connected');
         statusBar.innerHTML = 'Status: Connected!';
         statusBar.appendChild(urlSpan);
+        statusBar.appendChild(attribution);
 
         terminal.options.cursorBlink = true;
 
@@ -182,6 +194,38 @@ function bootup(args) {
     fullItem.onclick = () => container.classList.toggle('fullscreen');
 
     return demonicWeb;
+}
+
+// Show "Running <name> by <author> (<license>)" in 'elem', with the name
+// linked to the program's URL, or clear it when 'meta' is null. Built with
+// textContent so values from the server are never parsed as HTML.
+function showAttribution(elem, meta) {
+    elem.replaceChildren();
+    if (meta == null)
+        return;
+
+    elem.append('Running ');
+
+    let name = document.createElement('span');
+    let url = null;
+    try {
+        url = meta.url ? new URL(meta.url) : null;
+    } catch (err) {
+        url = null;
+    }
+    if (url && (url.protocol == 'https:' || url.protocol == 'http:')) {
+        name = document.createElement('a');
+        name.href = url.href;
+        name.target = '_blank';
+        name.rel = 'noopener noreferrer';
+    }
+    name.textContent = meta.name;
+    elem.append(name);
+
+    if (meta.author)
+        elem.append(` by ${meta.author}`);
+    if (meta.license)
+        elem.append(` (${meta.license})`);
 }
 
 function getNewUrl(demonicWeb, urlSpan) {

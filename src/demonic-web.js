@@ -222,6 +222,13 @@ class DemonicWeb {
                 this.cmds.push(obj.cmd);
             }
 
+            // Attribution for the program that is starting; cleared when
+            // it exits.
+            if (obj.meta != null) {
+                this.eventEmitter.emit('meta', obj.meta);
+                return;
+            }
+
             if (obj.draw != null) {
                 this.draw = obj.draw;
                 return;
@@ -251,6 +258,7 @@ class DemonicWeb {
             }
 
             if (obj.exit != null) {
+                this.eventEmitter.emit('meta', null);
                 this.draw = true;
                 if (loading)
                     loading = false;

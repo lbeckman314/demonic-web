@@ -130,6 +130,15 @@ button:hover {
     background-color: #AA0000;
 }
 
+.attribution {
+    margin-left: 1em;
+    font-weight: normal;
+}
+
+.attribution > a {
+    color: inherit;
+}
+
 .urlSpan {
     float: right;
     cursor: pointer;
