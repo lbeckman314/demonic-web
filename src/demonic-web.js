@@ -23,6 +23,10 @@ class DemonicWeb {
         this.fitAddon = fitAddon;
         this.fit();
 
+        // Tell the server whenever the terminal size changes (e.g. after
+        // fit()), so full-screen programs can redraw at the new size.
+        term.onResize(() => this.sendResize());
+
         // Add key listeners
         this.addKeyListeners(term);
     }
@@ -35,6 +39,18 @@ class DemonicWeb {
         const buff = new Buffer.from(input);
         const output = buff.toString('utf8');
         return output;
+    }
+
+    // Send the current terminal size. 'data' is included (empty) so servers
+    // that predate the resize message treat it as harmless input; they
+    // still read 'cols' and 'rows', which send() adds.
+    sendResize() {
+        if (this.ws == null || this.ws.readyState != WebSocket.OPEN)
+            return;
+        this.send({
+            resize: { cols: this.term.cols, rows: this.term.rows },
+            data: '',
+        });
     }
 
     getReadyState() {
@@ -196,6 +212,7 @@ class DemonicWeb {
 
         ws.onopen = () => {
             this.eventEmitter.emit('connected');
+            this.sendResize();
         }
 
         ws.onmessage = (e) => {
