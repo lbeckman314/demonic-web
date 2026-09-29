@@ -35,12 +35,6 @@ class DemonicWeb {
         this.fitAddon.fit();
     }
 
-    deserialize(input) {
-        const buff = new Buffer.from(input);
-        const output = buff.toString('utf8');
-        return output;
-    }
-
     // Send the current terminal size. 'data' is included (empty) so servers
     // that predate the resize message treat it as harmless input; they
     // still read 'cols' and 'rows', which send() adds.
@@ -116,8 +110,9 @@ class DemonicWeb {
         let cmdIndex = 0;
         let cmd = '';
         term.onKey((e) => {
-            // Escape
-            if (e.key == '\u001b')
+            // Escape leaves the terminal at the prompt. While a program
+            // is running it is passed through (vim and most TUIs need it).
+            if (e.key == '\u001b' && this.draw)
                 term.blur();
 
             if (!this.isOpen)
@@ -201,7 +196,6 @@ class DemonicWeb {
     createWebSocket(url) {
         let obj = {};
         let loading = false;
-        let message = '';
 
         let ws = new WebSocket(url);
         this.eventEmitter.emit('connecting');
@@ -271,8 +265,7 @@ class DemonicWeb {
                     loading = false;
                 }
                 this.term.focus();
-                message = this.deserialize(obj.out);
-                this.term.write(message);
+                this.term.write(obj.out);
             }
         }
 
